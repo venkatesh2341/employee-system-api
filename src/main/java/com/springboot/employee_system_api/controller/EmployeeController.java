@@ -1,11 +1,14 @@
 package com.springboot.employee_system_api.controller;
 
 import com.springboot.employee_system_api.DTO.CreateEmployeeDTO;
+import com.springboot.employee_system_api.DTO.EmployeeDTO;
 import com.springboot.employee_system_api.entity.Employee;
 import com.springboot.employee_system_api.service.EmployeeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/")
@@ -22,5 +25,10 @@ public class EmployeeController {
     public ResponseEntity<Employee> createEmployee(@RequestBody CreateEmployeeDTO createEmployeeDto){
 
         return new ResponseEntity<>( employeeService.createEmployee(createEmployeeDto), HttpStatus.CREATED);
+    }
+
+    @GetMapping("employees")
+    public ResponseEntity<List<EmployeeDTO>> getEmployees(){
+        return new ResponseEntity<>(employeeService.getEmployees(), HttpStatus.OK);
     }
 }
