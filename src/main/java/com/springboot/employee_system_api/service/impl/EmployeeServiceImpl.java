@@ -5,6 +5,7 @@ import com.springboot.employee_system_api.DTO.EmployeeDTO;
 import com.springboot.employee_system_api.entity.Employee;
 import com.springboot.employee_system_api.repository.EmployeeRepository;
 import com.springboot.employee_system_api.service.EmployeeService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -50,4 +51,28 @@ public class EmployeeServiceImpl implements EmployeeService {
             employeeRepository.deleteById(id);
         }
     }
+
+    @Override
+    public EmployeeDTO getEmployee(Long id) {
+        Optional<Employee> employee =  employeeRepository.findById(id);
+        EmployeeDTO employeeDTO = new EmployeeDTO();
+        employee.ifPresentOrElse(value -> BeanUtils.copyProperties(value, employeeDTO),
+                () -> {throw new RuntimeException();});
+
+        return employeeDTO;
+    }
+
+    @Override
+    public EmployeeDTO updateEmployee(Long id,EmployeeDTO employeeDTO) {
+        Employee existingEmployee = employeeRepository.findById(id).get();
+        existingEmployee.setFirstName(employeeDTO.getFirstName());
+        existingEmployee.setLastName(employeeDTO.getLastName());
+        existingEmployee.setEmailId(employeeDTO.getEmailId());
+
+        EmployeeDTO updatedEmployee = new EmployeeDTO();
+        existingEmployee =employeeRepository.save(existingEmployee);
+        BeanUtils.copyProperties(existingEmployee, updatedEmployee);
+        return updatedEmployee;
+    }
+
 }
