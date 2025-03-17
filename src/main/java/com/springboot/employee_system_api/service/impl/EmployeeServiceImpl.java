@@ -8,6 +8,7 @@ import com.springboot.employee_system_api.service.EmployeeService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -40,5 +41,13 @@ public class EmployeeServiceImpl implements EmployeeService {
                                                 employee.getEmailId()))
                 .toList();
         return employeeDTOS;
+    }
+
+    @Override
+    public void deleteEmployee(Long id) {
+        Optional<Employee> employee =  employeeRepository.findById(id);
+        if(employee.isPresent()){
+            employeeRepository.deleteById(id);
+        }
     }
 }
